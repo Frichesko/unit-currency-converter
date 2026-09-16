@@ -10,6 +10,32 @@
     <header>
         <h1>Конвертер валют і одиниць</h1>
     </header>
+        <main>
+        <section>
+            <h2>Вибір типу конвертації</h2>
+
+        </section>
+        <section>
+            <h2>Форма ковертації</h2>
+            <label for="form_of_convertation">Оберіть вхідну одиницю</label>
+            <select id="set_type" name="set_type">
+                <option value="USD">USD</option>
+                <option value="UAH">UAH</option>
+            </select>
+
+            <label for="set_convertation">Уведіть суму або значення</label>
+            <input type="number" id="set_convertation" name="set_convertation">
+
+            <label for="form_of_convertation">Оберіть вихідну одиницю</label>
+            <select id="get_type" name="get_type">
+                <option value="USD">USD</option>
+                <option value="UAH">UAH</option>
+            </select>
+
+            <label for="get_convertation">Отримана сума або значення</label>
+            <output type="number" id="get_convertation" name="get_convertation">
+        </section>
+    </main>
     <script src="js/app.js"></script>
 </body>
 </html>
