@@ -13,11 +13,16 @@
         <main>
         <section>
             <h2>Вибір типу конвертації</h2>
-
+            <label for="conversion_category">Оберіть категорію:</label>
+            <select id="conversion_category" name="conversion_category">
+                <option value="currency">Валюта</option>
+                <option value="length">Довжина</option>
+                <option value="weight">Вага</option>
+            </select>
         </section>
         <section>
             <h2>Форма ковертації</h2>
-            <label for="form_of_convertation">Оберіть вхідну одиницю</label>
+            <label for="set_type">Оберіть вхідну одиницю</label>
             <select id="set_type" name="set_type">
                 <option value="USD">USD</option>
                 <option value="UAH">UAH</option>
@@ -26,14 +31,14 @@
             <label for="set_convertation">Уведіть суму або значення</label>
             <input type="number" id="set_convertation" name="set_convertation">
 
-            <label for="form_of_convertation">Оберіть вихідну одиницю</label>
+            <label for="get_type">Оберіть вихідну одиницю</label>
             <select id="get_type" name="get_type">
                 <option value="USD">USD</option>
                 <option value="UAH">UAH</option>
             </select>
 
             <label for="get_convertation">Отримана сума або значення</label>
-            <output type="number" id="get_convertation" name="get_convertation">
+            <output id="get_convertation" name="get_convertation"></output>
         </section>
     </main>
     <footer>
