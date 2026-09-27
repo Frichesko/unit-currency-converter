@@ -1,0 +1,88 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body{
+    margin:0;
+    font-family: system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1f2937;
+    background-color: #f3f4f6
+}
+
+header{
+    background-color: #1e40af;
+    color: #ffffff;
+    padding: 1.5rem 2rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+section {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+section h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+  color: #111827;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+#cnvrt_btn {
+  padding: 12px 24px;
+  border-radius: 6px;
+  background-color: #1f6feb;
+  color: #ffffff;
+}
+
+#convert-btn:hover {
+  background-color: #1551b5;
+}
+
+output {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #e9ecef;
+  border-radius: 6px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+footer {
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.form-input {
+  padding: 12px;
+  font-size: 1.1rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.form-input:focus {
+  border-color: #1f6feb;
+}
