@@ -27,40 +27,48 @@
         <section>
             <h2>Форма конвертації</h2>
             <form id="converter-form">
-                <div class="form-group">
-                    <label for="set_type">Оберіть вхідну одиницю</label>
-                    <select id="set_type" name="set_type">
-                        <option value="USD">USD</option>
-                        <option value="UAH">UAH</option>
-                        <option value="EUR">EUR</option>
-                        <option value="MM">Міліметри</option>
-                        <option value="SM">Сантиметри</option>
-                        <option value="MT">Метри</option>
-                        <option value="KM">Кілометри</option>
-                        <option value="GR">Грами</option>
-                        <option value="KG">Кілограми</option>
-                        <option value="TN">Тони</option>
-                    </select>
-                </div>
+                <div class="converter-row">
+                    <div class="field-col">
+                        <div class="form-group">
+                            <label for="set_type">Оберіть вхідну одиницю</label>
+                            <select id="set_type" name="set_type">
+                                <option value="USD">USD</option>
+                                <option value="UAH">UAH</option>
+                                <option value="EUR">EUR</option>
+                                <option value="MM">Міліметри</option>
+                                <option value="SM">Сантиметри</option>
+                                <option value="MT">Метри</option>
+                                <option value="KM">Кілометри</option>
+                                <option value="GR">Грами</option>
+                                <option value="KG">Кілограми</option>
+                                <option value="TN">Тони</option>
+                            </select>
+                        </div>
 
-                <div class="form-group">
-                    <label for="set_convertation">Уведіть суму або значення</label>
-                    <input type="number" id="set_convertation" name="set_convertation">
-                </div>
+                        <div class="form-group">
+                            <label for="set_convertation">Уведіть суму або значення</label>
+                            <input type="number" id="set_convertation" name="set_convertation">
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="get_type">Оберіть вихідну одиницю</label>
-                    <select id="get_type" name="get_type">
-                        <option value="USD">USD</option>
-                        <option value="UAH">UAH</option>
-                    </select>
-                </div>
+                    <div class="action-col">
+                        <button type="submit" id="cnvrt_btn">Конвертувати</button>
+                    </div>
 
-                <button type="submit" id="cnvrt_btn">Конвертувати</button>
+                    <div class="field-col">
+                        <div class="form-group">
+                            <label for="get_type">Оберіть вихідну одиницю</label>
+                            <select id="get_type" name="get_type">
+                                <option value="USD">USD</option>
+                                <option value="UAH">UAH</option>
+                            </select>
+                        </div>
 
-                <div class="form-group">
-                    <label for="get_convertation">Отримана сума або значення</label>
-                    <output id="get_convertation" name="get_convertation"></output>
+                        <div class="form-group">
+                            <label for="get_convertation">Отримана сума або значення</label>
+                            <output id="get_convertation" name="get_convertation"></output>
+                        </div>
+                    </div>
                 </div>
             </form>
         </section>

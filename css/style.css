@@ -12,6 +12,11 @@ body{
 }
 
 header{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
     background-color: #1e40af;
     color: #ffffff;
     padding: 1.5rem 2rem;
@@ -21,6 +26,7 @@ header h1 {
   margin: 0;
   font-size: 1.8rem;
   color: #ffffff;
+  text-align: center;
 }
 
 main {
@@ -45,6 +51,9 @@ section h2 {
 }
 
 .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 1.25rem;
 }
 #cnvrt_btn {
@@ -52,6 +61,13 @@ section h2 {
   border-radius: 6px;
   background-color: #1f6feb;
   color: #ffffff;
+}
+
+.form-group select,
+.form-group input,
+.form-group output {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #cnvrt_btn:hover {
@@ -86,4 +102,44 @@ footer {
 
 .form-input:focus {
   border-color: #1f6feb;
+}
+
+#converter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .converter-row {
+        flex-direction: row;
+        align-items: center;
+        display: flex;
+        gap: 16px;
+    }
+
+    .field-col {
+        flex: 1;
+    }
+
+    #cnvrt_btn {
+        width: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    main {
+        max-width: 800px;   
+        margin: 40px auto;
+        padding: 32px;
+    }
+
+    .converter-row {
+        gap: 32px;
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
