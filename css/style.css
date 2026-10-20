@@ -1,14 +1,36 @@
+/* НЕЧІТКА ВИМОГА: «інтерфейс має викликати довіру».
+   Інтерпретація: стримана фінансова палітра. Темно-синій основний колір, 
+   глибокий зелений лише для головної дії, решта нейтральні сірі. Яскравих 
+   кольорів немає, усі пари текст/фон мають контраст ≥ 4.5:1. Кнопка помітна 
+   кольором і жирним шрифтом, але не крикуща: без збільшення, анімацій і тіней. */
+
 *, *::before, *::after {
     box-sizing: border-box;
+}
+
+:root {
+  --primary: #1e3a8a;
+  --primary-text: #1e40af;
+  --accent: #166534;
+  --accent-hover: #14532d;
+  --background: #f3f4f6;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --text-muted: #4b5563;
+  --field-border: #6b7280;  
+  --field-height: 44px;
+  --border: #e5e7eb;
+  --output-bg: #f9fafb;
 }
 
 body{
     margin:0;
     font-family: system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: 16px;
     line-height: 1.5;
-    color: #1f2937;
-    background-color: #f3f4f6
+    color:var(--text);
+    background-color:var(--background);
+    
 }
 
 header{
@@ -17,15 +39,15 @@ header{
     justify-content: center;
     align-items: center;
     gap: 16px;
-    background-color: #1e40af;
-    color: #ffffff;
+    background-color:var(--primary);
+    color:var(--surface);
     padding: 1.5rem 2rem;
 }
 
 header h1 {
   margin: 0;
-  font-size: 1.8rem;
-  color: #ffffff;
+  font-size: 28px;
+  color:var(--surface);
   text-align: center;
 }
 
@@ -36,18 +58,18 @@ main {
 }
 
 section {
-  background-color: #ffffff;
+  background-color:var(--surface);
   padding: 24px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   margin-bottom: 24px;
 }
 
 section h2 {
   margin-top: 0;
   margin-bottom: 16px;
-  font-size: 1.3rem;
-  color: #111827;
+  font-size: 20px;
+  color:var(--primary);
 }
 
 .form-group {
@@ -57,57 +79,69 @@ section h2 {
   margin-bottom: 1.25rem;
 }
 #cnvrt_btn {
-  padding: 12px 24px;
+  width: auto;
+  padding: 0 24px;
+  border: 0;
+  font-weight: 700;
+  height: var(--field-height);
+  color:var(--surface);
+  background-color: var(--accent);
+  cursor: pointer;
   border-radius: 6px;
-  background-color: #1f6feb;
-  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+
 }
 
 .form-group select,
 .form-group input,
 .form-group output {
     width: 100%;
-    box-sizing: border-box;
+    height: var(--field-height);
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.form-group select,
+.form-group input {
+  color: var(--text);
+  background-color:var(--surface);
+  border: 1px solid var(--field-border);
 }
 
 #cnvrt_btn:hover {
-  background-color: #1551b5;
+  background-color:var(--accent-hover);
 }
 
 output {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: #e9ecef;
-  border-radius: 6px;
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  background-color:var(--output-bg);
+  color: var(--primary-text); 
+  border: 1px solid var(--field-border);
   font-weight: 700;
-  color: #0d47a1;
 }
 
 footer {
   text-align: center;
   padding: 24px 16px;
-  font-size: 0.875rem;
-  color: #6b7280;
-}
-
-.form-input {
-  padding: 12px;
-  font-size: 1.1rem;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  margin-bottom: 12px;
-}
-
-.form-input:focus {
-  border-color: #1f6feb;
+  font-size: 14px;
+  color:var(--text-muted);
 }
 
 #converter-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+@media (max-width: 599px) {
+  #cnvrt_btn {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
 
 @media (min-width: 600px) {
@@ -120,10 +154,6 @@ footer {
 
     .field-col {
         flex: 1;
-    }
-
-    #cnvrt_btn {
-        width: auto;
     }
 }
 
