@@ -39,7 +39,7 @@ const lenght=10;
 
 const weight=5;
 
-resultConvertation=convert(amount, rates.UAH);
+const resultConvertation=convert(amount, rates.UAH);
 console.log(`${amount} USD = ${resultConvertation} UAH`);
 
 console.log(convertUnit(5, lengthRates.KM, lengthRates.MT));
