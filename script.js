@@ -18,6 +18,32 @@ const massRates = {
     TN:1000
 }
 
+const ratesContainer = document.querySelector('#rates-list');
+const ratesCountSummary = document.querySelector('#rates-count');
+
+// Функція для відображення списку курсів валют у DOM та оновлення підсумку
+function renderRates(ratesObj) {
+    // Очищення списку перед додаванням нових елементів
+    ratesContainer.innerHTML = '';
+    // Перебір об'єкта із курсами валют
+    for (const [currency, rate] of Object.entries(ratesObj)) {
+        const li = document.createElement('li');
+        li.textContent = `${currency}: ${rate}`;
+        li.dataset.rate = rate;
+
+        // Додавання класу для курсів, більших за 1
+        if (rate > 1) {
+            li.classList.add('big-rate');
+        }
+
+        ratesContainer.append(li);
+    }
+
+    ratesCountSummary.textContent = `Кількість валют: ${Object.keys(ratesObj).length}`;
+}
+
+renderRates(rates);
+
 //Функція для виводу курсів
 function printRates(ratesObj) {
   for (const currency of Object.keys(ratesObj)) {
