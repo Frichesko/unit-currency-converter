@@ -85,11 +85,15 @@
         </section>
 
         <section>
-            <h2>Актуальні курси</h2>
+            <h2>Актуальні курси (Frankfurter API)</h2>
+            <p id="rates-loading" style="display: none; color: var(--primary); font-weight: 500;">Завантаження курсів валют...</p>
+            <p id="rates-error" style="display: none; color: #ef4444; font-weight: 500;"></p>
             <ul id="rates-list">
 
             </ul>
             <p id="rates-count">Кількість валют: 0</p>
+            <p id="rates-date" style="font-size: 13px; color: var(--text-muted);"></p>
+            <button type="button" id="refresh-rates-btn">Оновити курси</button>
         </section>
     </main>
 

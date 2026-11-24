@@ -1,3 +1,5 @@
+const API_URL = 'https://api.frankfurter.app/latest?from=USD';
+
 // Об'єкт курсів
 const rates = {
     USD:1,
@@ -39,6 +41,10 @@ const unitOptions = {
 
 const ratesContainer = document.querySelector('#rates-list');
 const ratesCountSummary = document.querySelector('#rates-count');
+const refreshRatesBtn = document.querySelector('#refresh-rates-btn');
+const ratesLoading = document.querySelector('#rates-loading');
+const ratesError = document.querySelector('#rates-error');
+const ratesDate = document.querySelector('#rates-date');
 
 const form = document.querySelector('#converter-form');
 const amountInput = document.querySelector('#set_convertation');
@@ -78,7 +84,55 @@ function printRates(ratesObj) {
   }
 }
 
-renderRates(rates);
+// Отримання курсів валют через Frankfurter API (курси Європейського центрального банку): https://api.frankfurter.app/
+async function loadRates() {
+    if (ratesLoading) ratesLoading.style.display = 'block';
+    if (ratesError) ratesError.style.display = 'none';
+    if (refreshRatesBtn) refreshRatesBtn.disabled = true;
+
+    try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            if (response.status === 422 || response.status === 404) {
+                throw new Error('Перевірте код валюти');
+            }
+            throw new Error(`Сервер відповів кодом ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Отримані дані з API (Frankfurter):', data);
+
+        if (data.rates) {
+            Object.assign(rates, data.rates);
+            renderRates(data.rates);
+        }
+
+        if (ratesDate && data.date) {
+            ratesDate.textContent = `Дата курсів: ${data.date} (Базова валюта: ${data.base})`;
+        }
+    } catch (error) {
+        console.error('Помилка завантаження даних:', error);
+        if (ratesError) {
+            ratesError.textContent = error.message.includes('Перевірте код валюти')
+                ? 'Перевірте код валюти'
+                : 'Не вдалося завантажити дані. Спробуйте пізніше.';
+            ratesError.style.display = 'block';
+        }
+    } finally {
+        if (ratesLoading) ratesLoading.style.display = 'none';
+        if (refreshRatesBtn) refreshRatesBtn.disabled = false;
+    }
+}
+
+if (refreshRatesBtn) {
+    refreshRatesBtn.addEventListener('click', () => {
+        loadRates();
+    });
+}
+
+// Початкове завантаження курсів
+loadRates();
 printRates(rates);
 
 const convertUnit = (amountUnit, input, output) => amountUnit * (input / output);
@@ -164,7 +218,6 @@ function renderHistory(historyArray) {
     historyCountSummary.textContent = `Кількість конвертацій в історії: ${historyArray.length}`;
 }
 
-// Крок 8: Додаткова клієнтська валідація на подію input
 // Валідація: при amount <= 0 setCustomValidity('Сума має бути додатною')
 amountInput.addEventListener('input', () => {
     const val = parseFloat(amountInput.value);
@@ -176,7 +229,6 @@ amountInput.addEventListener('input', () => {
     updateLiveResult();
 });
 
-// Крок 9: Друга подія варіанта — change на select одиниці (from/to)
 // Миттєво перераховує й оновлює результат без сабміту форми
 fromSelect.addEventListener('change', () => {
     updateLiveResult();

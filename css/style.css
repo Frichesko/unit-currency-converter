@@ -203,3 +203,25 @@ footer {
   flex-direction: column;
   gap: 16px;
 }
+#refresh-rates-btn {
+  padding: 10px 18px;
+  background-color: var(--primary);
+  color: var(--surface);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+#refresh-rates-btn:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+}
+
+#refresh-rates-btn:disabled {
+  background-color: var(--text-muted);
+  cursor: not-allowed;
+}
