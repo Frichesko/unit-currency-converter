@@ -1,6 +1,80 @@
 // Обрано Vue 3 через простий синтаксис шаблонів, вбудовану реактивність (v-model, computed, v-for) та підключення через CDN без збірки.
 
 const API_URL = 'https://api.frankfurter.app/latest?from=USD';
+const STORAGE_KEY = 'converterHistory';
+const MIGRATED_KEY = 'converterMigrated';
+const DB_NAME = 'ConverterDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'history';
+
+function saveToLocalStorage(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function loadFromLocalStorage() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    } catch (error) {
+        console.error('Пошкоджені дані в localStorage:', error);
+        return [];
+    }
+}
+
+// Відкриття або ініціалізація локальної бази даних IndexedDB
+function openDB() {
+    return new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+            reject(new Error('IndexedDB не підтримується браузером'));
+            return;
+        }
+
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+            }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Додавання або оновлення запису конвертації в IndexedDB
+async function addItem(item) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(item);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+    });
+}
+
+// Отримання всіх записів історії з IndexedDB
+async function getAllItems() {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const request = tx.objectStore(STORE_NAME).getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Видалення запису історії за його ідентифікатором id
+async function deleteItem(id) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).delete(id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+    });
+}
 
 const ConverterForm = {
     props: ['category', 'options', 'rates', 'lengthRates', 'massRates'],
@@ -40,13 +114,11 @@ const ConverterForm = {
         saveConversion() {
             if (!this.amount || this.amount <= 0) return;
             this.$emit('add-history', {
-                id: Date.now(),
+                from: this.fromUnit,
+                to: this.toUnit,
                 amount: Number(this.amount),
-                fromUnit: this.fromUnit,
-                toUnit: this.toUnit,
                 result: this.result,
-                category: this.category,
-                time: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                timestamp: Date.now()
             });
         }
     },
@@ -156,12 +228,67 @@ Vue.createApp({
             conversionHistory: [],
             ratesLoading: false,
             ratesError: '',
-            ratesDate: ''
+            ratesDate: '',
+            dbError: ''
         };
     },
     methods: {
-        addToHistory(record) {
-            this.conversionHistory.push(record);
+        formatTime(timestamp) {
+            return new Date(timestamp).toLocaleTimeString('uk-UA', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        },
+        async initStorage() {
+            try {
+                const existing = await getAllItems();
+                const isMigrated = localStorage.getItem(MIGRATED_KEY) === 'true';
+
+                if (existing.length === 0 && !isMigrated) {
+                    const lsItems = loadFromLocalStorage();
+                    for (const item of lsItems) {
+                        const { id, ...cleanItem } = item;
+                        await addItem(cleanItem);
+                    }
+                    localStorage.setItem(MIGRATED_KEY, 'true');
+                }
+
+                await this.refreshHistory();
+            } catch (error) {
+                console.error('Помилка відкриття IndexedDB:', error);
+                this.dbError = 'Локальне сховище IndexedDB недоступне. Використовується резервне збереження в localStorage.';
+                this.conversionHistory = loadFromLocalStorage()
+                    .sort((a, b) => b.timestamp - a.timestamp)
+                    .slice(0, 10);
+            }
+        },
+        async refreshHistory() {
+            const allItems = await getAllItems();
+            this.conversionHistory = allItems
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .slice(0, 10);
+        },
+        async addToHistory(record) {
+            try {
+                await addItem(record);
+                await this.refreshHistory();
+            } catch (error) {
+                console.error('Помилка збереження в IndexedDB:', error);
+                this.dbError = 'Не вдалося зберегти запис у IndexedDB. Дані збережено у localStorage.';
+                this.conversionHistory.unshift(record);
+                this.conversionHistory = this.conversionHistory.slice(0, 10);
+                saveToLocalStorage(this.conversionHistory);
+            }
+        },
+        async removeHistoryItem(id) {
+            try {
+                await deleteItem(id);
+                await this.refreshHistory();
+            } catch (error) {
+                console.error('Помилка видалення з IndexedDB:', error);
+                this.dbError = 'Не вдалося видалити запис із IndexedDB.';
+            }
         },
         // Отримання курсів валют через Frankfurter API (курси Європейського центрального банку): https://api.frankfurter.app/
         async loadRates() {
@@ -197,6 +324,7 @@ Vue.createApp({
         }
     },
     mounted() {
+        this.initStorage();
         this.loadRates();
     }
 }).mount('#app');

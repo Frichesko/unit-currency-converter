@@ -37,15 +37,19 @@
 
         <section id="history-section">
             <h2>Історія конвертацій</h2>
+            <p v-if="dbError" id="db-error" style="color: #ef4444; font-weight: 500;">{{ dbError }}</p>
             <ul id="history-list">
                 <li
                     v-for="(item, index) in conversionHistory"
-                    :key="item.id"
+                    :key="item.id || item.timestamp"
                     class="history-item"
                     :class="{ 'big-rate': item.result >= 1000 }"
                 >
-                    <span class="history-text">{{ index + 1 }}. {{ item.amount }} {{ item.fromUnit }} = {{ item.result }} {{ item.toUnit }}</span>
-                    <span class="history-meta">{{ item.time }}</span>
+                    <span class="history-text">{{ index + 1 }}. {{ item.amount }} {{ item.from }} = {{ item.result }} {{ item.to }}</span>
+                    <span class="history-actions">
+                        <span class="history-meta">{{ formatTime(item.timestamp) }}</span>
+                        <button v-if="item.id" type="button" class="delete-btn" @click="removeHistoryItem(item.id)">Видалити</button>
+                    </span>
                 </li>
             </ul>
             <p id="history-count">Кількість конвертацій в історії: {{ conversionHistory.length }}</p>

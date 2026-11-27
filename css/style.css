@@ -225,3 +225,24 @@ footer {
   background-color: var(--text-muted);
   cursor: not-allowed;
 }
+
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.delete-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #dc2626;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #fee2e2;
+}
